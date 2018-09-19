@@ -90,11 +90,13 @@ installWallet() {
     make -f makefile.unix USE_UPNP=- > /dev/null 2>&1
     chmod 755 $COINDAEMON > /dev/null 2>&1
     strip $COINDAEMON > /dev/null 2>&1
+    sudo mkdir ~/.katana2x > /dev/null 2>&1
+    touch ~/.katana2x/katana.conf > /dev/null 2>&1
     sudo mv $COINDAEMON /usr/bin > /dev/null 2>&1
     cd > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Add your masternode configuration and save. Press "control x" after "y" and "enter". Wait a few seconds, now the editor will open. ${NONE}";
     sleep 10
-    nano ~/.katana2x/pawcoin.conf
+    nano ~/.katana2x/katana.conf
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
