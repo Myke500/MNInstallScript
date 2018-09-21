@@ -11,6 +11,7 @@ UNDERLINE='\033[4m'
 MAX=7
 
 COINGITHUB=https://github.com/foundchain/FCHAIN
+COINGITFOLDER=FCHAIN
 COINPORT=6566
 COINRPCPORT=6565
 COINDAEMON=fchaind
@@ -80,21 +81,18 @@ installWallet() {
     echo -e "[5/${MAX}] Installing wallet. Please wait, you can take your dog for a walk, this may take 20-30 min"
     sleep 3
     git clone $COINGITHUB > /dev/null 2>&1
-    cd ~/PawCoinMN/src/leveldb > /dev/null 2>&1
+    cd ~/$COINCORE/src/leveldb > /dev/null 2>&1
     wget https://github.com/google/leveldb/archive/v1.18.tar.gz > /dev/null 2>&1
     tar xfv v1.18.tar.gz > /dev/null 2>&1
     cp leveldb-1.18/Makefile ~/FCHAIN/src/leveldb/ > /dev/null 2>&1
     chmod +x build_detect_platform > /dev/null 2>&1
     cd > /dev/null 2>&1
-    cd ~/FCHAIN/src > /dev/null 2>&1
+    cd ~/$COINGITFOLDER/src > /dev/null 2>&1
     make -f makefile.unix USE_UPNP=- > /dev/null 2>&1
     chmod 755 $COINDAEMON > /dev/null 2>&1
     strip $COINDAEMON > /dev/null 2>&1
     sudo mv $COINDAEMON /usr/bin > /dev/null 2>&1
     cd > /dev/null 2>&1
-    echo -e "${NONE}${GREEN}* Add your masternode configuration and save. Press "control x" after "y" and "enter". Wait a few seconds, now the editor will open. ${NONE}";
-    sleep 10
-    nano ~/.PawcoinMN/pawcoin.conf
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
@@ -112,6 +110,10 @@ startWallet() {
     sudo rm fee_estimates.dat > /dev/null 2>&1
     sudo rm mnpayments.dat > /dev/null 2>&1
     sudo rm banlist.dat > /dev/null 2>&1
+    touch $COINCONFIG
+    echo -e "${NONE}${GREEN}* Add your masternode configuration and save. Press "control x" after "y" and "enter". Wait a few seconds, now the editor will open. ${NONE}";
+    sleep 10
+    nano $COINCONFIG
     cd > /dev/null 2>&1
     $COINDAEMON -daemon > /dev/null 2>&1
     cd ~ > /dev/null 2>&1
@@ -134,7 +136,7 @@ cd
 echo
 echo -e "-----------------------------------------------------------------------------"
 echo -e "|                                                                           |"
-echo -e "|                 ${BOLD}----- Pawcoin Masternode script -----${NONE}                     |"
+echo -e "|                 ${BOLD}----- FOUNDCHAIN Masternode script -----${NONE}                     |"
 echo -e "|                                                                           |"
 echo -e "|           ${CYAN}__________               _________        .__         ${NONE}          |" 
 echo -e "|           ${CYAN}\______   \_____ __  _  _\_   ___ \  ____ |__| ____   ${NONE}          |"                   
@@ -146,7 +148,7 @@ echo -e "|                                                                      
 echo -e "-----------------------------------------------------------------------------"
 
 echo -e "${BOLD}"
-read -p "This script will setup your PawCoin Masternode. Do you wish to continue? (y/n)? " response
+read -p "This script will setup your FOUNDChain Masternode. Do you wish to continue? (y/n)? " response
 echo -e "${NONE}"
 
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
@@ -162,7 +164,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     echo -e "${BOLD}The VPS side of your masternode has been installed${NONE}".
     echo -e "${BOLD}Happy mining¡¡¡¡.${NONE}".
     echo 
-    echo -e "${CYAN}Script By SoyBtc${NONE}".
+    echo -e "${CYAN}Script By SoyBtc - Modified by boyroywax${NONE}".
     echo
     else
     echo && echo "Installation cancelled" && echo
