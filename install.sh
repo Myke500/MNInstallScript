@@ -81,13 +81,13 @@ installWallet() {
     echo -e "[5/${MAX}] Installing wallet. Please wait, you can take your dog for a walk, this may take 20-30 min"
     sleep 3
     git clone $COINGITHUB > /dev/null 2>&1
-    cd ~/$COINCORE/src/leveldb > /dev/null 2>&1
+    cd ~/$COINGITHUB/src/leveldb > /dev/null 2>&1
     wget https://github.com/google/leveldb/archive/v1.18.tar.gz > /dev/null 2>&1
     tar xfv v1.18.tar.gz > /dev/null 2>&1
     cp leveldb-1.18/Makefile ~/FCHAIN/src/leveldb/ > /dev/null 2>&1
     chmod +x build_detect_platform > /dev/null 2>&1
     cd > /dev/null 2>&1
-    cd ~/$COINGITFOLDER/src > /dev/null 2>&1
+    cd ~/$COINGITHUB/src > /dev/null 2>&1
     make -f makefile.unix USE_UPNP=- > /dev/null 2>&1
     chmod 755 $COINDAEMON > /dev/null 2>&1
     strip $COINDAEMON > /dev/null 2>&1
@@ -110,10 +110,10 @@ startWallet() {
     sudo rm fee_estimates.dat > /dev/null 2>&1
     sudo rm mnpayments.dat > /dev/null 2>&1
     sudo rm banlist.dat > /dev/null 2>&1
-    touch $COINCONFIG > /dev/null 2>&1
+    sudo touch ~/$COINCORE/$COINCONFIG > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Add your masternode configuration and save. Press "control x" after "y" and "enter". Wait a few seconds, now the editor will open. ${NONE}";
     sleep 10 
-    nano $COINCONFIG > /dev/null 2>&1
+    nano $COINCONFIG
     cd > /dev/null 2>&1
     $COINDAEMON -daemon > /dev/null 2>&1
     cd ~ > /dev/null 2>&1
