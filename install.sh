@@ -10,12 +10,12 @@ BOLD='\033[1m'
 UNDERLINE='\033[4m'
 MAX=7
 
-COINGITHUB=https://github.com/PawCoin/PawCoinMN
-COINPORT=32390
-COINRPCPORT=32391
-COINDAEMON=pawcoind
-COINCORE=.PawCoinMN
-COINCONFIG=pawcoin.conf
+COINGITHUB=https://github.com/foundchain/FCHAIN
+COINPORT=6566
+COINRPCPORT=6565
+COINDAEMON=fchaind
+COINCORE=.fchain
+COINCONFIG=fchain.conf
 
 checkForUbuntuVersion() {
    echo "[1/${MAX}] Checking Ubuntu version..."
@@ -79,16 +79,16 @@ installWallet() {
     echo
     echo -e "[5/${MAX}] Installing wallet. Please wait, you can take your dog for a walk, this may take 20-30 min"
     sleep 3
-    git clone https://github.com/PawCoin/PawCoinMN > /dev/null 2>&1
+    git clone $COINGITHUB > /dev/null 2>&1
     cd ~/PawCoinMN/src/leveldb > /dev/null 2>&1
     wget https://github.com/google/leveldb/archive/v1.18.tar.gz > /dev/null 2>&1
     tar xfv v1.18.tar.gz > /dev/null 2>&1
-    cp leveldb-1.18/Makefile ~/PawCoinMN/src/leveldb/ > /dev/null 2>&1
+    cp leveldb-1.18/Makefile ~/FCHAIN/src/leveldb/ > /dev/null 2>&1
     chmod +x build_detect_platform > /dev/null 2>&1
     cd > /dev/null 2>&1
-    cd ~/PawCoinMN/src > /dev/null 2>&1
+    cd ~/FCHAIN/src > /dev/null 2>&1
     make -f makefile.unix USE_UPNP=- > /dev/null 2>&1
-    chmod 755 pawcoind > /dev/null 2>&1
+    chmod 755 $COINDAEMON > /dev/null 2>&1
     strip $COINDAEMON > /dev/null 2>&1
     sudo mv $COINDAEMON /usr/bin > /dev/null 2>&1
     cd > /dev/null 2>&1
