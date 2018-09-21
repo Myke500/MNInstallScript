@@ -110,10 +110,10 @@ startWallet() {
     sudo rm fee_estimates.dat > /dev/null 2>&1
     sudo rm mnpayments.dat > /dev/null 2>&1
     sudo rm banlist.dat > /dev/null 2>&1
-    touch $COINCONFIG
+    touch $COINCONFIG > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Add your masternode configuration and save. Press "control x" after "y" and "enter". Wait a few seconds, now the editor will open. ${NONE}";
-    sleep 10
-    nano $COINCONFIG
+    sleep 10 
+    nano $COINCONFIG > /dev/null 2>&1
     cd > /dev/null 2>&1
     $COINDAEMON -daemon > /dev/null 2>&1
     cd ~ > /dev/null 2>&1
