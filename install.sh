@@ -87,11 +87,11 @@ installWallet() {
     cp leveldb-1.18/Makefile ~/FCHAIN/src/leveldb/ > /dev/null 2>&1
     chmod +x build_detect_platform > /dev/null 2>&1
     cd > /dev/null 2>&1
-    cd ~/FHCAIN/src > /dev/null 2>&1
-    make -f makefile.unix USE_UPNP=- > /dev/null 2>&1
-    chmod 755 $COINDAEMON > /dev/null 2>&1
-    strip $COINDAEMON > /dev/null 2>&1
-    sudo mv $COINDAEMON /usr/bin > /dev/null 2>&1
+    cd ~/FHCAIN > /dev/null 2>&1
+    ./autogen.sh > /dev/null 2>&1
+    ./configure > /dev/null 2>&1
+    sudo make > /dev/null 2>&1
+    sudo make install > /dev/null 2>&1
     cd > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
@@ -100,6 +100,7 @@ startWallet() {
     echo
     echo -e "[6/${MAX}] Starting wallet daemon..."
     sleep 3
+    sudo mkdir ~/.fchain > /dev/null 2>&1
     cd ~/.fchain > /dev/null 2>&1
     sudo rm governance.dat > /dev/null 2>&1
     sudo rm netfulfilled.dat > /dev/null 2>&1
