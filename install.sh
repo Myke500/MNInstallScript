@@ -8,9 +8,9 @@ CYAN='\033[01;36m'
 WHITE='\033[01;37m'
 BOLD='\033[1m'
 UNDERLINE='\033[4m'
-MAX=8
+MAX=9
 
-COINGITHUB=https://github.com/BOXYCoinFoundation/boxycoin
+COINGITHUB=https://github.com/BOXYCoinFoundation/boxycoin.git
 COINGITFOLDER=boxycoin
 COINPORT=121524
 COINRPCPORT=3335
@@ -30,9 +30,18 @@ checkForUbuntuVersion() {
     fi
 }
 
-updateAndUpgrade() {
+changeSsh() {
     echo
     echo "[2/${MAX}] Runing update and upgrade. Please wait..."
+    sleep 3
+#    echo "ClientAliveInterval 600" >> 
+#TCPKeepAlive yes
+#ClientAliveCountMax 10
+}
+
+updateAndUpgrade() {
+    echo
+    echo "[3/${MAX}] Runing update and upgrade. Please wait..."
     sleep 3
     sudo DEBIAN_FRONTEND=noninteractive apt-get update -qq -y > /dev/null 2>&1
     sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -qq > /dev/null 2>&1
@@ -41,7 +50,7 @@ updateAndUpgrade() {
 
 installFirewall() {
     echo
-    echo -e "[3/${MAX}] Installing UFW. Please wait..."
+    echo -e "[4/${MAX}] Installing UFW. Please wait..."
     sleep 3
     sudo apt-get -y install ufw > /dev/null 2>&1
     sudo ufw default deny incoming > /dev/null 2>&1
@@ -57,7 +66,7 @@ installFirewall() {
 
 installSwap() {
     echo
-    echo -e "[4/${MAX}] Installing SwapFile. Please wait..."
+    echo -e "[5/${MAX}] Installing SwapFile. Please wait..."
     sleep 3
     sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=1000 > /dev/null 2>&1
     sudo mkswap /var/swap.img > /dev/null 2>&1
@@ -69,7 +78,7 @@ installSwap() {
 
 installDependencies() {
     echo
-    echo -e "[5/${MAX}] Installing dependencies. Please wait..."
+    echo -e "[6/${MAX}] Installing dependencies. Please wait..."
     sleep 3
     sudo apt-get install -y build-essential libtool autotools-dev pkg-config libssl-dev libboost-all-dev autoconf automake -qq -y > /dev/null 2>&1
     sudo apt-get install libzmq3-dev libminiupnpc-dev libssl-dev libevent-dev -qq -y > /dev/null 2>&1
@@ -85,7 +94,7 @@ installDependencies() {
 
 installWallet() {
     echo
-    echo -e "[6/${MAX}] Installing wallet. Please wait, you can take your dog for a walk, this may take 20-30 min"
+    echo -e "[7/${MAX}] Installing wallet. Please wait, you can take your dog for a walk, this may take 20-30 min"
     sleep 3
     git clone $COINGITHUB > /dev/null 2>&1
     cd ~/$COINGITFOLDER/src/leveldb > /dev/null 2>&1
@@ -105,7 +114,7 @@ installWallet() {
 
 startWallet() {
     echo
-    echo -e "[7/${MAX}] Starting wallet daemon..."
+    echo -e "[8/${MAX}] Starting wallet daemon..."
     sleep 3
     sudo mkdir ~/$COINCORE > /dev/null 2>&1
     cd ~/$COINCORE > /dev/null 2>&1
@@ -130,7 +139,7 @@ startWallet() {
 
 syncWallet() {
     echo
-    echo "[8/${MAX}] Waiting for wallet to sync.";
+    echo "[9/${MAX}] Waiting for wallet to sync.";
     sleep 3
     echo -e "${GREEN}* Blockchain Synced${NONE}";
     echo -e "${GREEN}* Masternode List Synced${NONE}";
