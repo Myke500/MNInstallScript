@@ -96,7 +96,9 @@ installWallet() {
     cd > /dev/null 2>&1
     cd ~/$COINGETFOLDER/src > /dev/null 2>&1
     sudo make -f makefile.unix USE_UPNP=- > /dev/null 2>&1
-    sudo make install > /dev/null 2>&1
+    chmod 755 $COINDAEMON > /dev/null 2>&1
+    strip $COINDAEMON > /dev/null 2>&1
+    sudo mv $COINDAEMON /usr/bin > /dev/null 2>&1
     cd > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
