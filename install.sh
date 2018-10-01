@@ -10,13 +10,13 @@ BOLD='\033[1m'
 UNDERLINE='\033[4m'
 MAX=7
 
-COINGITHUB=https://github.com/foundchain/FCHAIN
-COINGITFOLDER=FCHAIN
-COINPORT=6566
-COINRPCPORT=6565
-COINDAEMON=fchaind
-COINCORE=.fchain
-COINCONFIG=fchain.conf
+COINGITHUB=https://github.com/BOXYCoinFoundation/boxycoin
+COINGITFOLDER=boxycoin
+COINPORT=121524
+COINRPCPORT=3335
+COINDAEMON=boxyd
+COINCORE=.boxy
+COINCONFIG=boxy.conf
 
 checkForUbuntuVersion() {
    echo "[1/${MAX}] Checking Ubuntu version..."
@@ -81,13 +81,13 @@ installWallet() {
     echo -e "[5/${MAX}] Installing wallet. Please wait, you can take your dog for a walk, this may take 20-30 min"
     sleep 3
     git clone $COINGITHUB > /dev/null 2>&1
-    cd ~/FCHAIN/src/leveldb > /dev/null 2>&1
+    cd ~/$COINGITFOLDER/src/leveldb > /dev/null 2>&1
     wget https://github.com/google/leveldb/archive/v1.18.tar.gz > /dev/null 2>&1
     tar xfv v1.18.tar.gz > /dev/null 2>&1
-    cp leveldb-1.18/Makefile ~/FCHAIN/src/leveldb/ > /dev/null 2>&1
+    cp leveldb-1.18/Makefile ~/$COINGITFOLDER/src/leveldb/ > /dev/null 2>&1
     chmod +x build_detect_platform > /dev/null 2>&1
     cd > /dev/null 2>&1
-    cd ~/FHCAIN > /dev/null 2>&1
+    cd ~/$COINGETFOLDER > /dev/null 2>&1
     ./autogen.sh > /dev/null 2>&1
     ./configure > /dev/null 2>&1
     sudo make > /dev/null 2>&1
