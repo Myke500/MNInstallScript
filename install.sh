@@ -8,7 +8,7 @@ CYAN='\033[01;36m'
 WHITE='\033[01;37m'
 BOLD='\033[1m'
 UNDERLINE='\033[4m'
-MAX=7
+MAX=8
 
 COINGITHUB=https://github.com/BOXYCoinFoundation/boxycoin
 COINGITFOLDER=boxycoin
@@ -55,9 +55,21 @@ installFirewall() {
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
+installSwap() {
+    echo
+    echo -e "[4/${MAX}] Installing SwapFile. Please wait..."
+    sleep 3
+    sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=1000 > /dev/null 2>&1
+    sudo mkswap /var/swap.img > /dev/null 2>&1
+    sudo swapon /var/swap.img > /dev/null 2>&1
+    sudo chmod 0600 /var/swap.img > /dev/null 2>&1
+    sudo chown root:root /var/swap.img > /dev/null 2>&1
+    echo -e "${NONE}${GREEN}* Done${NONE}";
+}
+
 installDependencies() {
     echo
-    echo -e "[4/${MAX}] Installing dependencies. Please wait..."
+    echo -e "[5/${MAX}] Installing dependencies. Please wait..."
     sleep 3
     sudo apt-get install -y build-essential libtool autotools-dev pkg-config libssl-dev libboost-all-dev autoconf automake -qq -y > /dev/null 2>&1
     sudo apt-get install libzmq3-dev libminiupnpc-dev libssl-dev libevent-dev -qq -y > /dev/null 2>&1
@@ -68,17 +80,12 @@ installDependencies() {
     sudo apt-get update -qq -y > /dev/null 2>&1
     sudo apt-get install libdb4.8-dev libdb4.8++-dev -qq -y > /dev/null 2>&1
     sudo apt-get install libgmp3-dev -y > /dev/null 2>&1
-    sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=1000 > /dev/null 2>&1
-    sudo mkswap /var/swap.img > /dev/null 2>&1
-    sudo swapon /var/swap.img > /dev/null 2>&1
-    sudo chmod 0600 /var/swap.img > /dev/null 2>&1
-    sudo chown root:root /var/swap.img > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
 installWallet() {
     echo
-    echo -e "[5/${MAX}] Installing wallet. Please wait, you can take your dog for a walk, this may take 20-30 min"
+    echo -e "[6/${MAX}] Installing wallet. Please wait, you can take your dog for a walk, this may take 20-30 min"
     sleep 3
     git clone $COINGITHUB > /dev/null 2>&1
     cd ~/$COINGITFOLDER/src/leveldb > /dev/null 2>&1
@@ -87,10 +94,8 @@ installWallet() {
     cp leveldb-1.18/Makefile ~/$COINGITFOLDER/src/leveldb/ > /dev/null 2>&1
     chmod +x build_detect_platform > /dev/null 2>&1
     cd > /dev/null 2>&1
-    cd ~/$COINGETFOLDER > /dev/null 2>&1
-    ./autogen.sh > /dev/null 2>&1
-    ./configure > /dev/null 2>&1
-    sudo make > /dev/null 2>&1
+    cd ~/$COINGETFOLDER/src > /dev/null 2>&1
+    sudo make -f makefile.unix USE_UPNP=- > /dev/null 2>&1
     sudo make install > /dev/null 2>&1
     cd > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Done${NONE}";
@@ -98,10 +103,10 @@ installWallet() {
 
 startWallet() {
     echo
-    echo -e "[6/${MAX}] Starting wallet daemon..."
+    echo -e "[7/${MAX}] Starting wallet daemon..."
     sleep 3
-    sudo mkdir ~/.fchain > /dev/null 2>&1
-    cd ~/.fchain > /dev/null 2>&1
+    sudo mkdir ~/$COINCORE > /dev/null 2>&1
+    cd ~/$COINCORE > /dev/null 2>&1
     sudo rm governance.dat > /dev/null 2>&1
     sudo rm netfulfilled.dat > /dev/null 2>&1
     sudo rm peers.dat > /dev/null 2>&1
@@ -111,7 +116,7 @@ startWallet() {
     sudo rm fee_estimates.dat > /dev/null 2>&1
     sudo rm mnpayments.dat > /dev/null 2>&1
     sudo rm banlist.dat > /dev/null 2>&1
-    sudo touch ~/.fchain/$COINCONFIG > /dev/null 2>&1
+    sudo touch ~/$COINCORE/$COINCONFIG > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Add your masternode configuration and save. Press "control x" after "y" and "enter". Wait a few seconds, now the editor will open. ${NONE}";
     sleep 10 
     nano $COINCONFIG
@@ -123,8 +128,8 @@ startWallet() {
 
 syncWallet() {
     echo
-    echo "[7/${MAX}] Waiting for wallet to sync.";
-    sleep 20
+    echo "[8/${MAX}] Waiting for wallet to sync.";
+    sleep 3
     echo -e "${GREEN}* Blockchain Synced${NONE}";
     echo -e "${GREEN}* Masternode List Synced${NONE}";
     echo -e "${GREEN}* Winners List Synced${NONE}";
@@ -149,13 +154,14 @@ echo -e "|                                                                      
 echo -e "-----------------------------------------------------------------------------"
 
 echo -e "${BOLD}"
-read -p "This script will setup your FOUNDChain Masternode. Do you wish to continue? (y/n)? " response
+read -p "This script will setup your BOXY Coin Ubuntu 16.04 Wallet (CommandLine Only). Do you wish to continue? (y/n)? " response
 echo -e "${NONE}"
 
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     checkForUbuntuVersion
     updateAndUpgrade
     installFirewall
+    installSwap
     installDependencies
     installWallet
     startWallet
