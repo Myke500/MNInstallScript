@@ -17,6 +17,8 @@ COINRPCPORT=121526
 COINDAEMON=boxyd
 COINCORE=.boxy
 COINCONFIG=boxy.conf
+COINCONFIGSRC="https://raw.githubusercontent.com/BOXYCoinFoundation/addnodes/master/boxy.conf"
+SWAPSIZE=4000
 
 checkForUbuntuVersion() {
    echo "[1/${MAX}] Checking Ubuntu version..."
@@ -34,9 +36,10 @@ changeSsh() {
     echo
     echo "[2/${MAX}] Runing update and upgrade. Please wait..."
     sleep 3
-#    echo "ClientAliveInterval 600" >> 
-#TCPKeepAlive yes
-#ClientAliveCountMax 10
+    echo "ClientAliveInterval 600" >> /etc/ssh/sshd_config
+    echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
+    echo "ClientAliveCountMax 10" >> /etc/ssh/sshd_config
+    echo -e "${GREEN}* Done${NONE}";
 }
 
 updateAndUpgrade() {
@@ -68,7 +71,7 @@ installSwap() {
     echo
     echo -e "[5/${MAX}] Installing SwapFile. Please wait..."
     sleep 3
-    sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=1000 > /dev/null 2>&1
+    sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=$SWAPSIZE > /dev/null 2>&1
     sudo mkswap /var/swap.img > /dev/null 2>&1
     sudo swapon /var/swap.img > /dev/null 2>&1
     sudo chmod 0600 /var/swap.img > /dev/null 2>&1
@@ -103,7 +106,7 @@ installWallet() {
     cp leveldb-1.18/Makefile ~/$COINGITFOLDER/src/leveldb/ > /dev/null 2>&1
     chmod +x build_detect_platform > /dev/null 2>&1
     cd > /dev/null 2>&1
-    cd ~/$COINGETFOLDER/src > /dev/null 2>&1
+    cd ~/$COINGITFOLDER/src > /dev/null 2>&1
     sudo make -f makefile.unix USE_UPNP=- > /dev/null 2>&1
     chmod 755 $COINDAEMON > /dev/null 2>&1
     strip $COINDAEMON > /dev/null 2>&1
@@ -127,9 +130,10 @@ startWallet() {
     sudo rm fee_estimates.dat > /dev/null 2>&1
     sudo rm mnpayments.dat > /dev/null 2>&1
     sudo rm banlist.dat > /dev/null 2>&1
-    sudo touch ~/$COINCORE/$COINCONFIG > /dev/null 2>&1
-    echo -e "${NONE}${GREEN}* Add your masternode configuration and save. Press "control x" after "y" and "enter". Wait a few seconds, now the editor will open. ${NONE}";
-    sleep 10 
+  # sudo touch ~/$COINCORE/$COINCONFIG > /dev/null 2>&1
+    wget $COINCONFIGSRC > /dev/null 2>&1
+    echo -e "${NONE}${GREEN}* Add your RPC Username and Password and save. Press "control x" after "y" and "enter". Wait a few seconds, now the editor will open. ${NONE}";
+    sleep 5 
     nano $COINCONFIG
     cd > /dev/null 2>&1
     $COINDAEMON -daemon > /dev/null 2>&1
@@ -145,6 +149,7 @@ syncWallet() {
     echo -e "${GREEN}* Masternode List Synced${NONE}";
     echo -e "${GREEN}* Winners List Synced${NONE}";
     echo -e "${GREEN}* Done reindexing wallet${NONE}";
+    $COINDAEMON getinfo
 }
 
 clear
@@ -170,6 +175,7 @@ echo -e "${NONE}"
 
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     checkForUbuntuVersion
+    changeSsh
     updateAndUpgrade
     installFirewall
     installSwap
