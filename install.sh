@@ -10,6 +10,7 @@ BOLD='\033[1m'
 UNDERLINE='\033[4m'
 MAX=9
 
+COINNAME=SatoshiCoin
 COINGITHUB=https://github.com/SatoshiCoin-Crypto/SatoshiCoin.git
 COINGITFOLDER=SatoshiCoin
 COINPORT=12453
@@ -162,7 +163,7 @@ cd
 echo
 echo -e "-----------------------------------------------------------------------------"
 echo -e "|                                                                           |"
-echo -e "|   ${BOLD}----- BOXY Coin Ubuntu Install script -----${NONE}               |"
+echo -e "|   ${BOLD}----- $COINNAME Ubuntu Install script -----${NONE}               |"
 echo -e "|                                                                           |"
 echo -e "|           ${CYAN}__________ ________  ____  ________.___.${NONE}          |" 
 echo -e "|           ${CYAN}\______   \\_____  \ \   \/  /\__  |   |${NONE}          |"                   
@@ -174,7 +175,7 @@ echo -e "|                                                                      
 echo -e "-----------------------------------------------------------------------------"
 
 echo -e "${BOLD}"
-read -p "This script will setup your BOXY Coin Ubuntu 16.04 Wallet (CommandLine Only). Do you wish to continue? (y/n)? " response
+read -p "This script will setup your $COINNAME Ubuntu $UBUNTUVERSION Wallet (CommandLine Only). Do you wish to continue? (y/n)? " response
 echo -e "${NONE}"
 
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
@@ -189,7 +190,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     syncWallet
 
     echo
-    echo -e "${BOLD}Your BOXY Coin Wallet is Installed${NONE}".
+    echo -e "${BOLD}Your $COINNAME Wallet is Installed${NONE}".
     echo -e "${BOLD}Happy STAKING¡¡¡¡.${NONE}".
     echo 
     echo -e "${CYAN}Script By SoyBtc - Modified by lowerj${NONE}".
