@@ -12,21 +12,21 @@ MAX=9
 
 COINGITHUB=https://github.com/SatoshiCoin-Crypto/SatoshiCoin.git
 COINGITFOLDER=SatoshiCoin
-COINPORT=121524
-COINRPCPORT=121526
-COINDAEMON=boxyd
-COINCORE=.boxy
-COINCONFIG=boxy.conf
-COINCONFIGSRC="https://raw.githubusercontent.com/BOXYCoinFoundation/addnodes/master/boxy.conf"
+COINPORT=12453
+COINRPCPORT=12454
+COINDAEMON=Satoshid
+COINCORE=.Satoshi
+COINCONFIG=Satoshi.conf
+COINCONFIGSRC="https://raw.githubusercontent.com/boyroywax/addnodes/master/Satoshi.conf"
 SWAPSIZE=4000
 
 checkForUbuntuVersion() {
    echo "[1/${MAX}] Checking Ubuntu version..."
    sleep 3
-    if [[ `cat /etc/issue.net`  == *16.04* ]]; then
+    if [[ `cat /etc/issue.net`  == *18.04* ]]; then
         echo -e "${GREEN}* You are running `cat /etc/issue.net` . Setup will continue.${NONE}";
     else
-        echo -e "${RED}* You are not running Ubuntu 16.04.X. You are running `cat /etc/issue.net` ${NONE}";
+        echo -e "${RED}* You are not running Ubuntu 18.04.X. You are running `cat /etc/issue.net` ${NONE}";
         echo && echo "Installation cancelled" && echo;
         exit;
     fi
