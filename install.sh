@@ -10,8 +10,8 @@ BOLD='\033[1m'
 UNDERLINE='\033[4m'
 MAX=9
 
-COINGITHUB=https://github.com/BOXYCoinFoundation/boxycoin.git
-COINGITFOLDER=boxycoin
+COINGITHUB=https://github.com/SatoshiCoin-Crypto/SatoshiCoin.git
+COINGITFOLDER=SatoshiCoin
 COINPORT=121524
 COINRPCPORT=121526
 COINDAEMON=boxyd
