@@ -19,14 +19,15 @@ COINCORE=.Satoshi
 COINCONFIG=Satoshi.conf
 COINCONFIGSRC="https://raw.githubusercontent.com/boyroywax/addnodes/master/Satoshi.conf"
 SWAPSIZE=4000
+UBUNTUVERSION=18.04
 
 checkForUbuntuVersion() {
    echo "[1/${MAX}] Checking Ubuntu version..."
    sleep 3
-    if [[ `cat /etc/issue.net`  == *18.04* ]]; then
+    if [[ `cat /etc/issue.net`  == *$UBUNTUVERSION* ]]; then
         echo -e "${GREEN}* You are running `cat /etc/issue.net` . Setup will continue.${NONE}";
     else
-        echo -e "${RED}* You are not running Ubuntu 18.04.X. You are running `cat /etc/issue.net` ${NONE}";
+        echo -e "${RED}* You are not running Ubuntu 16.04.X. You are running `cat /etc/issue.net` ${NONE}";
         echo && echo "Installation cancelled" && echo;
         exit;
     fi
@@ -34,17 +35,20 @@ checkForUbuntuVersion() {
 
 changeSsh() {
     echo
-    echo "[2/${MAX}] Runing update and upgrade. Please wait..."
+    echo "[2/${MAX}] Setting SSH session to stay alive. Please wait..."
     sleep 3
+    echo >> /etc/ssh/sshd_config
+    echo "#Keep SSH Alive" >> /etc/ssh/sshd_config
     echo "ClientAliveInterval 600" >> /etc/ssh/sshd_config
     echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
     echo "ClientAliveCountMax 10" >> /etc/ssh/sshd_config
+    service ssh restart > /dev/nul 2>&1
     echo -e "${GREEN}* Done${NONE}";
 }
 
 updateAndUpgrade() {
     echo
-    echo "[3/${MAX}] Runing update and upgrade. Please wait..."
+    echo "[3/${MAX}] Running update and upgrade. Please wait..."
     sleep 3
     sudo DEBIAN_FRONTEND=noninteractive apt-get update -qq -y > /dev/null 2>&1
     sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -qq > /dev/null 2>&1
@@ -158,14 +162,14 @@ cd
 echo
 echo -e "-----------------------------------------------------------------------------"
 echo -e "|                                                                           |"
-echo -e "|   ${BOLD}----- BOXY Coin Ubuntu Install script -----$ {NONE}              |"
+echo -e "|   ${BOLD}----- BOXY Coin Ubuntu Install script -----${NONE}               |"
 echo -e "|                                                                           |"
-echo -e "|           ${CYAN}d8888b.  .d88b.  db    db db    db      ${NONE}          |" 
-echo -e "|           ${CYAN}88  `8D .8P  Y8. `8b  d8' `8b  d8'      ${NONE}          |"                   
-echo -e "|           ${CYAN}88oooY' 88    88  `8bd8'   `8bd8'       ${NONE}          |"
-echo -e "|           ${CYAN}88~~~b. 88    88  .dPYb.     88         ${NONE}          |"
-echo -e "|           ${CYAN}88   8D `8b  d8' .8P  Y8.    88         ${NONE}          |"
-echo -e "|           ${CYAN}Y8888P'  `Y88P'  YP    YP    YP         ${NONE}          |"
+echo -e "|           ${CYAN}__________ ________  ____  ________.___.${NONE}          |" 
+echo -e "|           ${CYAN}\______   \\_____  \ \   \/  /\__  |   |${NONE}          |"                   
+echo -e "|           ${CYAN} |    |  _/ /   |   \ \     /  /   |   |${NONE}          |"
+echo -e "|           ${CYAN} |    |   \/    |    \/     \  \____   | ${NONE}          |"
+echo -e "|           ${CYAN} |______  /\_______  /___/\  \ / ______|${NONE}          |"
+echo -e "|           ${CYAN}        \/         \/      \_/ \/       ${NONE}          |"
 echo -e "|                                                                           |"
 echo -e "-----------------------------------------------------------------------------"
 
@@ -185,10 +189,10 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     syncWallet
 
     echo
-    echo -e "${BOLD}The VPS side of your masternode has been installed${NONE}".
-    echo -e "${BOLD}Happy mining¡¡¡¡.${NONE}".
+    echo -e "${BOLD}Your BOXY Coin Wallet is Installed${NONE}".
+    echo -e "${BOLD}Happy STAKING¡¡¡¡.${NONE}".
     echo 
-    echo -e "${CYAN}Script By SoyBtc - Modified by boyroywax${NONE}".
+    echo -e "${CYAN}Script By SoyBtc - Modified by lowerj${NONE}".
     echo
     else
     echo && echo "Installation cancelled" && echo
