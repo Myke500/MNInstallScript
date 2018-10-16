@@ -111,7 +111,7 @@ installWallet() {
     cp leveldb-1.18/Makefile ~/$COINGITFOLDER/src/leveldb/ > /dev/null 2>&1
     chmod +x build_detect_platform > /dev/null 2>&1
     cd > /dev/null 2>&1
-    cd ~/$COINGITFOLDER/src > /dev/null 2>&1
+    cd ~/$COINGITFOLDER > /dev/null 2>&1
     ./autogen.sh > /dev/null 2>&1
     ./configure --enable-upnp-default > /dev/null 2>&1
     sudo make > /dev/null 2>&1
