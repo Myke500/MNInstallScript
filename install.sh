@@ -10,15 +10,15 @@ BOLD='\033[1m'
 UNDERLINE='\033[4m'
 MAX=9
 
-COINNAME=SatoshiCoin
-COINGITHUB=https://github.com/SatoshiCoin-Crypto/SatoshiCoin.git
-COINGITFOLDER=SatoshiCoin
-COINPORT=12453
-COINRPCPORT=12454
-COINDAEMON=Satoshid
-COINCORE=.Satoshi
-COINCONFIG=Satoshi.conf
-COINCONFIGSRC="https://raw.githubusercontent.com/boyroywax/addnodes/master/Satoshi.conf"
+COINNAME=CryptoDezireCash
+COINGITHUB=https://github.com/cryptodezire/CryptoDezireCash.git
+COINGITFOLDER=CryptoDezireCash
+COINPORT=35601
+COINRPCPORT=35602
+COINDAEMON=CryptoDezireCashd
+COINCORE=.CryptoDezireCash
+COINCONFIG=cryptodezirecash.conf
+COINCONFIGSRC="https://raw.githubusercontent.com/boyroywax/addnodes/master/cryptodezirecash.conf"
 SWAPSIZE=4000
 UBUNTUVERSION=18.04
 
@@ -88,10 +88,10 @@ installDependencies() {
     echo
     echo -e "[6/${MAX}] Installing dependencies. Please wait..."
     sleep 3
-    sudo apt-get install -y build-essential libtool autotools-dev pkg-config libssl-dev libboost-all-dev autoconf automake -qq -y > /dev/null 2>&1
+    sudo apt-get install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils python3 -qq -y > /dev/null 2>&1
     sudo apt-get install libzmq3-dev libminiupnpc-dev libssl-dev libevent-dev -qq -y > /dev/null 2>&1
-    sudo apt-get install libgmp-dev -qq -y > /dev/null 2>&1
-    sudo apt-get install openssl -qq -y > /dev/null 2>&1
+    sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev -qq -y > /dev/null 2>&1
+    sudo apt-get install libboost-all-dev -qq -y > /dev/null 2>&1
     sudo apt-get install software-properties-common -qq -y > /dev/null 2>&1
     sudo add-apt-repository ppa:bitcoin/bitcoin -y > /dev/null 2>&1
     sudo apt-get update -qq -y > /dev/null 2>&1
