@@ -114,7 +114,7 @@ installWallet() {
     cd > /dev/null 2>&1
     cd ~/$COINGITFOLDER > /dev/null 2>&1
     ./autogen.sh > /dev/null 2>&1
-    ./configure --enable-upnp-default > /dev/null 2>&1
+    ./configure --enable-upnp-default --with-unsupported-ssl > /dev/null 2>&1
     sudo make > /dev/null 2>&1
     sudo make install > /dev/null 2>&1
     cd > /dev/null 2>&1
