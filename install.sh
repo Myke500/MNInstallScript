@@ -92,6 +92,7 @@ installDependencies() {
     sudo apt-get install libzmq3-dev libminiupnpc-dev libssl-dev libevent-dev -qq -y > /dev/null 2>&1
     sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev -qq -y > /dev/null 2>&1
     sudo apt-get install libboost-all-dev -qq -y > /dev/null 2>&1
+    sudo apt-get install openssl -qq -y > /dev/null 2>&1
     sudo apt-get install software-properties-common -qq -y > /dev/null 2>&1
     sudo add-apt-repository ppa:bitcoin/bitcoin -y > /dev/null 2>&1
     sudo apt-get update -qq -y > /dev/null 2>&1
