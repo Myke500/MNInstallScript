@@ -73,21 +73,22 @@ installPython() {
     wget https://bootstrap.pypa.io/get-pip.py > /dev/null 2>&1
     sudo python3.6 get-pip.py > /dev/null 2>&1
     sudo ln -s /usr/bin/python3.6 /usr/local/bin/python3 > /dev/null 2>&1
-    python3 -m pip install -U discord.py -y > /dev/null 2>&1
-    pip install PyMySQL -y > /dev/null 2>&1
+    python3 -m pip install -U discord.py > /dev/null 2>&1
+    pip install PyMySQL -y  > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
 installTipbot() {
     echo
-    echo -e "[6/${MAX}] Installing TipBot and loading config.json."
+    echo -e "loading config.json."
     sleep 3
     git clone $COINGITHUB -b $GITBRANCH > /dev/null 2>&1
     git config --global credential.helper cache
     git clone $COINCONFIGSRC -b $GITBRANCH > /dev/null 2>&1
     rm ~/$COINGITFOLDER/config.json > /dev/null 2>&1
     cd ~/tbconfig/ > /dev/null 2>&1
-    mv config.json.$GITBRANCH ~/$COINGITFOLDER/config.json > /dev/null 2>&1
+    cp config.json.$GITBRANCH ~/$COINGITFOLDER/config.json > /dev/null 2>&1
+    cd .. > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
