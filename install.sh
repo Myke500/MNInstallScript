@@ -32,7 +32,7 @@ checkForUbuntuVersion() {
 
 updateAndUpgrade() {
     echo
-    echo "[3/${MAX}] Running update and upgrade. Please wait..."
+    echo "[2/${MAX}] Running update and upgrade. Please wait..."
     sleep 3
     sudo DEBIAN_FRONTEND=noninteractive apt-get update -qq -y > /dev/null 2>&1
     sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -qq > /dev/null 2>&1
@@ -41,7 +41,7 @@ updateAndUpgrade() {
 
 installSwap() {
     echo
-    echo -e "[5/${MAX}] Installing SwapFile. Please wait..."
+    echo -e "[3/${MAX}] Installing SwapFile. Please wait..."
     sleep 3
     sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=$SWAPSIZE > /dev/null 2>&1
     sudo mkswap /var/swap.img > /dev/null 2>&1
@@ -53,7 +53,7 @@ installSwap() {
 
 installMysql() {
     echo
-    echo -e "[6/${MAX}] Installing Mysql. Please wait..."
+    echo -e "[4/${MAX}] Installing Mysql. Please wait..."
     sleep 3
     sudo apt-get install mysql-server -y
     mysql_secure_installation
@@ -62,7 +62,7 @@ installMysql() {
 
 installPython() {
     echo
-    echo -e "[6/${MAX}] Installing Python and Pip. Please wait..."
+    echo -e "[5/${MAX}] Installing Python and Pip. Please wait..."
     sleep 3
     sudo add-apt-repository ppa:jonathonf/python-3.6 -qq -y > /dev/null 2>&1
     sudo apt update -qq -y > /dev/null 2>&1
@@ -80,7 +80,7 @@ installPython() {
 
 installTipbot() {
     echo
-    echo -e "[7/${MAX}] Installing TipBot and loading config.json."
+    echo -e "[6/${MAX}] Installing TipBot and loading config.json."
     sleep 3
     git clone $COINGITHUB -b $GITBRANCH > /dev/null 2>&1
     git config --global credential.helper cache
