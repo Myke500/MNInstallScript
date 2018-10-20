@@ -8,17 +8,13 @@ CYAN='\033[01;36m'
 WHITE='\033[01;37m'
 BOLD='\033[1m'
 UNDERLINE='\033[4m'
-MAX=9
+MAX=6
 
-COINNAME=CryptoDezireCash
-COINGITHUB=https://github.com/cryptodezire/CryptoDezireCash.git
-COINGITFOLDER=CryptoDezireCash
-COINPORT=35601
-COINRPCPORT=35602
-COINDAEMON=CryptoDezireCashd
-COINCORE=.CryptoDezireCash
-COINCONFIG=cryptodezirecash.conf
-COINCONFIGSRC="https://raw.githubusercontent.com/boyroywax/addnodes/master/cryptodezirecash.conf"
+COINNAME="PRiVCY Tip Bot"
+COINGITHUB="https://github.com/boyroywax/BOXYBotTEST.git"
+COINGITFOLDER=BOXYBotTEST
+GITBRANCH=privcy
+COINCONFIGSRC="https://raw.githubusercontent.com/boyroywax/tbconfig/master/config.json.privcy"
 SWAPSIZE=4000
 UBUNTUVERSION=18.04
 
@@ -34,19 +30,6 @@ checkForUbuntuVersion() {
     fi
 }
 
-changeSsh() {
-    echo
-    echo "[2/${MAX}] Setting SSH session to stay alive. Please wait..."
-    sleep 3
-    echo >> /etc/ssh/sshd_config
-    echo "#Keep SSH Alive" >> /etc/ssh/sshd_config
-    echo "ClientAliveInterval 600" >> /etc/ssh/sshd_config
-    echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
-    echo "ClientAliveCountMax 10" >> /etc/ssh/sshd_config
-    service ssh restart > /dev/nul 2>&1
-    echo -e "${GREEN}* Done${NONE}";
-}
-
 updateAndUpgrade() {
     echo
     echo "[3/${MAX}] Running update and upgrade. Please wait..."
@@ -54,22 +37,6 @@ updateAndUpgrade() {
     sudo DEBIAN_FRONTEND=noninteractive apt-get update -qq -y > /dev/null 2>&1
     sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -qq > /dev/null 2>&1
     echo -e "${GREEN}* Done${NONE}";
-}
-
-installFirewall() {
-    echo
-    echo -e "[4/${MAX}] Installing UFW. Please wait..."
-    sleep 3
-    sudo apt-get -y install ufw > /dev/null 2>&1
-    sudo ufw default deny incoming > /dev/null 2>&1
-    sudo ufw default allow outgoing > /dev/null 2>&1
-    sudo ufw allow ssh > /dev/null 2>&1
-    sudo ufw limit ssh/tcp > /dev/null 2>&1
-    sudo ufw allow $COINPORT/tcp > /dev/null 2>&1
-    sudo ufw allow $COINRPCPORT/tcp > /dev/null 2>&1
-    sudo ufw logging on > /dev/null 2>&1
-    echo "y" | sudo ufw enable > /dev/null 2>&1
-    echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
 installSwap() {
@@ -84,80 +51,46 @@ installSwap() {
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
-installDependencies() {
+installMysql() {
     echo
-    echo -e "[6/${MAX}] Installing dependencies. Please wait..."
+    echo -e "[6/${MAX}] Installing Mysql. Please wait..."
     sleep 3
-    sudo apt-get install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils python3 -qq -y > /dev/null 2>&1
-    sudo apt-get install libzmq3-dev libminiupnpc-dev libssl-dev libevent-dev -qq -y > /dev/null 2>&1
-    sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev -qq -y > /dev/null 2>&1
-    sudo apt-get install libboost-all-dev -qq -y > /dev/null 2>&1
-    sudo apt-get install openssl -qq -y > /dev/null 2>&1
+    sudo apt-get install mysql-server -y
+    mysql_secure_installation
+    systemctl status mysql.service
+}
+
+installPython() {
+    echo
+    echo -e "[6/${MAX}] Installing Python and Pip. Please wait..."
+    sleep 3
+    sudo add-apt-repository ppa:jonathonf/python-3.6 -qq -y > /dev/null 2>&1
+    sudo apt update -qq -y > /dev/null 2>&1
+    sudo apt-get install python3.6 -qq -y > /dev/null 2>&1
+    sudo apt-get install python3.6-dev -qq -y > /dev/null 2>&1
+    sudo apt-get install python3.6-venv -qq -y > /dev/null 2>&1
     sudo apt-get install software-properties-common -qq -y > /dev/null 2>&1
-    sudo add-apt-repository ppa:bitcoin/bitcoin -y > /dev/null 2>&1
-    sudo apt-get update -qq -y > /dev/null 2>&1
-    sudo apt-get install libdb4.8-dev libdb4.8++-dev -qq -y > /dev/null 2>&1
-    sudo apt-get install libgmp3-dev -y > /dev/null 2>&1
+    wget https://bootstrap.pypa.io/get-pip.py > /dev/null 2>&1
+    sudo python3.6 get-pip.py > /dev/null 2>&1
+    sudo ln -s /usr/bin/python3.6 /usr/local/bin/python3 > /dev/null 2>&1
+    python3 -m pip install -U discord.py -y > /dev/null 2>&1
+    pip install PyMySQL -y > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
-installWallet() {
+installTipbot() {
     echo
-    echo -e "[7/${MAX}] Installing wallet. Please wait, you can take your dog for a walk, this may take 20-30 min"
+    echo -e "[7/${MAX}] Installing TipBot and loading config.json."
     sleep 3
-    git clone $COINGITHUB > /dev/null 2>&1
-    cd ~/$COINGITFOLDER/src/leveldb > /dev/null 2>&1
-    wget https://github.com/google/leveldb/archive/v1.18.tar.gz > /dev/null 2>&1
-    tar xfv v1.18.tar.gz > /dev/null 2>&1
-    cp leveldb-1.18/Makefile ~/$COINGITFOLDER/src/leveldb/ > /dev/null 2>&1
-    chmod +x build_detect_platform > /dev/null 2>&1
-    cd > /dev/null 2>&1
-    cd ~/$COINGITFOLDER > /dev/null 2>&1
-    ./autogen.sh > /dev/null 2>&1
-    ./configure --enable-upnp-default --with-unsupported-ssl > /dev/null 2>&1
-    sudo make > /dev/null 2>&1
-    sudo make install > /dev/null 2>&1
-    cd > /dev/null 2>&1
-    cd > /dev/null 2>&1
+    git clone $COINGITHUB -b $GITBRANCH > /dev/null 2>&1
+    git config --global credential.helper cache
+    cd ~/$COINGITFOLDER/ > /dev/null 2>&1
+    wget https://raw.githubusercontent.com/boyroywax/tbconfig/master/config.json.$GITBRANCH > /dev/null 2>&1
+    rm config.json > /dev/null 2>&1
+    mv config.json.$GITBRANCH config.json
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
-startWallet() {
-    echo
-    echo -e "[8/${MAX}] Starting wallet daemon..."
-    sleep 3
-    sudo mkdir ~/$COINCORE > /dev/null 2>&1
-    cd ~/$COINCORE > /dev/null 2>&1
-    sudo rm governance.dat > /dev/null 2>&1
-    sudo rm netfulfilled.dat > /dev/null 2>&1
-    sudo rm peers.dat > /dev/null 2>&1
-    sudo rm -r blocks > /dev/null 2>&1
-    sudo rm mncache.dat > /dev/null 2>&1
-    sudo rm -r chainstate > /dev/null 2>&1
-    sudo rm fee_estimates.dat > /dev/null 2>&1
-    sudo rm mnpayments.dat > /dev/null 2>&1
-    sudo rm banlist.dat > /dev/null 2>&1
-  # sudo touch ~/$COINCORE/$COINCONFIG > /dev/null 2>&1
-    wget $COINCONFIGSRC > /dev/null 2>&1
-    echo -e "${NONE}${GREEN}* Add your RPC Username and Password and save. Press "control x" after "y" and "enter". Wait a few seconds, now the editor will open. ${NONE}";
-    sleep 5 
-    nano $COINCONFIG
-    cd > /dev/null 2>&1
-    $COINDAEMON -daemon > /dev/null 2>&1
-    cd ~ > /dev/null 2>&1
-    echo -e "${GREEN}* Done${NONE}";
-}
-
-syncWallet() {
-    echo
-    echo "[9/${MAX}] Waiting for wallet to sync.";
-    sleep 3
-    echo -e "${GREEN}* Blockchain Synced${NONE}";
-    echo -e "${GREEN}* Masternode List Synced${NONE}";
-    echo -e "${GREEN}* Winners List Synced${NONE}";
-    echo -e "${GREEN}* Done reindexing wallet${NONE}";
-    $COINDAEMON getinfo
-}
 
 clear
 cd
@@ -182,14 +115,11 @@ echo -e "${NONE}"
 
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     checkForUbuntuVersion
-    changeSsh
     updateAndUpgrade
-    installFirewall
     installSwap
-    installDependencies
-    installWallet
-    startWallet
-    syncWallet
+    installMysql
+    installPython
+    installTipbot
 
     echo
     echo -e "${BOLD}Your $COINNAME Wallet is Installed${NONE}".
