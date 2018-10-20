@@ -14,7 +14,7 @@ COINNAME="PRiVCY Tip Bot"
 COINGITHUB="https://github.com/boyroywax/BOXYBotTEST.git"
 COINGITFOLDER=BOXYBotTEST
 GITBRANCH=privcy
-COINCONFIGSRC="https://raw.githubusercontent.com/boyroywax/tbconfig/master/config.json.privcy"
+COINCONFIGSRC="https://raw.githubusercontent.com/boyroywax/tbconfig.git"
 SWAPSIZE=4000
 UBUNTUVERSION=18.04
 
@@ -84,10 +84,10 @@ installTipbot() {
     sleep 3
     git clone $COINGITHUB -b $GITBRANCH > /dev/null 2>&1
     git config --global credential.helper cache
-    cd ~/$COINGITFOLDER/ > /dev/null 2>&1
-    wget https://raw.githubusercontent.com/boyroywax/tbconfig/master/config.json.$GITBRANCH > /dev/null 2>&1
-    rm config.json > /dev/null 2>&1
-    mv config.json.$GITBRANCH config.json
+    git clone $COINCONFIGSRC -b $GITBRANCH > /dev/null 2>&1
+    rm ~/$COINGITFOLDER/config.json > /dev/null 2>&1
+    cd ~/tbconfig/ > /dev/null 2>&1
+    mv config.json.$GITBRANCH ~/$COINGITFOLDER/config.json > /dev/null 2>&1
     echo -e "${NONE}${GREEN}* Done${NONE}";
 }
 
