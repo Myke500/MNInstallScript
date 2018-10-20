@@ -60,6 +60,17 @@ installMysql() {
     systemctl status mysql.service
 }
 
+configMysql() {
+   sudo mysql
+   echo -e "${BOLD}"
+   read -p "Enter you Mysql root password: " responsepass
+   echo -e "${NONE}"
+   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$responsepass';
+   FLUSH PRIVILEGES;
+   quit;
+   echo -e "${NONE}${GREEN}* Done${NONE}";
+}
+
 installPython() {
     echo
     echo -e "[5/${MAX}] Installing Python and Pip. Please wait..."
@@ -119,6 +130,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     updateAndUpgrade
     installSwap
     installMysql
+    configMysql
     installPython
     installTipbot
 
